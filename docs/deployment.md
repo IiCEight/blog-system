@@ -17,6 +17,8 @@ tailscale serve status
 
 The background configuration persists. Keep the existing `fieldnotes-caddy` service and loopback binding. No public web firewall opening is required for this setup. To remove this HTTPS route, use `sudo tailscale serve --https=443 off`; the loopback service and SSH fallback remain available.
 
+If Tailscale ping succeeds but a browser reports a closed connection, check whether the device's system proxy handles the private hostname. Add the actual blog hostname to the proxy bypass list so it connects directly through Tailscale. On the deployment computer, an exact-host Windows bypass fixed this failure without changing browser protocols. Proxy applications may rewrite system bypass settings; preserve the exception in the application's own bypass settings if necessary.
+
 Build future releases with `sh deploy/release.sh https://your-node.your-tailnet.ts.net/`. Current output uses relative links and was verified through this HTTPS address. On restore, reconnect the server to the tailnet, restore its Serve route, and check HTTPS and authentication again.
 
 ## SSH tunnel fallback
