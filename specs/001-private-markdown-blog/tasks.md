@@ -1,6 +1,6 @@
 # Tasks and review gates
 
-Local implementation and private Tencent SSH-tunnel deployment are complete. Remaining user-content, repository-privacy, and public-domain checks are recorded in `docs/verification.md`.
+Local implementation and private Tencent Tailscale HTTPS deployment are complete. The SSH tunnel remains a fallback. Remaining user-content, repository-privacy, and public-domain checks are recorded in `docs/verification.md`.
 
 ## Phase 0: review
 
@@ -28,6 +28,7 @@ These gates reflect the user's request to review before implementation, not an a
 ## Phase 3: private hosting and publishing
 
 - [x] Inspect Tencent Ubuntu/runtime setup and configure loopback-only Caddy with site-wide authentication through the user-selected SSH tunnel. Public-domain HTTPS is deferred. (R06)
+- [x] Configure user-authorized Tailscale Serve for private HTTPS, retain Caddy authentication and loopback binding, and verify certificates, protected assets, reading, and search through the tailnet. (R06)
 - [x] Implement and exercise Linux staged release, previous-release tracking, rollback, and failed-build preservation. (R10)
 - [x] Document Typora image settings, metadata, publishing, backups, and restore. (R02, R03, R11)
 

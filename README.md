@@ -4,15 +4,19 @@ A private, self-hosted blog written in Typora, generated with Hugo, and served o
 
 ## Current status
 
-Implemented locally and deployed on Tencent Cloud through a private SSH tunnel. The pink frontend, Markdown rendering, archive, tags, search, and Typora import are working. Linux release, rollback, failed-build preservation, source restoration, and tunnel authentication checks passed. Public-domain HTTPS remains deferred by choice.
+Implemented locally and deployed on Tencent Cloud with private HTTPS through Tailscale Serve. The pink frontend, Markdown rendering, archive, tags, search, and Typora import are working. Linux release, rollback, failed-build preservation, source restoration, and authentication checks passed. Public-domain hosting remains deferred by choice.
 
 ## Open the server-hosted blog
+
+Connect your device to your Tailscale network, open https://your-node.your-tailnet.ts.net/, and sign in. No SSH tunnel is required. Local login details are in the ignored `.local/tunnel-login.txt` on the computer used for deployment; they are not in GitHub. Tailscale Serve provides private HTTPS and proxies to Caddy on server loopback. The site is available only within the tailnet and still requires the blog password.
+
+The SSH tunnel remains available as a fallback:
 
 ```sh
 ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:1314:127.0.0.1:8088 tencent
 ```
 
-Then open http://localhost:1314/ and sign in. Local login details are in the ignored `.local/tunnel-login.txt` on the computer used for deployment; they are not in GitHub. Caddy listens only on server loopback. Each other device needs its own SSH tunnel until a private HTTPS domain is configured.
+Then open http://localhost:1314/ and sign in.
 
 **Source privacy:** the GitHub repository was verified public during deployment. Make it private before committing personal Markdown or images. Authentication on the website does not protect publicly committed source content. Only sample notes have been deployed.
 

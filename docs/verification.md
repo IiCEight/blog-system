@@ -12,13 +12,13 @@ Date: 2026-10-01, Asia/Shanghai.
 - Inline/block math and bundled images rendered. A narrow-screen code overflow was fixed.
 - Keyboard skip link, reduced-motion scrolling, and reading without JavaScript checked. Enlarged root text checked on the desktop article; this is not a full accessibility audit or a comprehensive browser-zoom test.
 - Desktop homepage and mobile article screenshots visually inspected.
-- Linux release and rollback scripts passed shell syntax checks; execution on the actual Linux server is still pending.
+- Linux release and rollback scripts passed shell syntax checks and execution checks on the actual Linux server, recorded below.
 - Caddy 2.11.4 checksum verified. Production-style configuration adapted and validated locally, with loopback HTTP and disposable test credentials. Anonymous and wrong-password access denied for pages, image, CSS, search index, and missing route; valid credentials allow existing files. This does not verify production TLS.
 
 ## Pending
 
 - Real user Typora sample, including any nonstandard HTML, diagrams, or unusual math.
-- Domain/DNS and public-domain HTTPS, intentionally deferred in favor of an SSH tunnel.
+- Public-domain hosting, intentionally deferred; private Tailscale HTTPS is verified below.
 - An independent encrypted backup of Caddy service credentials and configuration; source restoration has been exercised, but a complete disaster-recovery backup has not been created.
 - GitHub source privacy: repository is public and must be made private before personal notes are committed.
 
@@ -36,3 +36,11 @@ Date: 2026-10-01, Asia/Shanghai.
 - Only sample notes are present. The website is private through SSH and authentication; the GitHub repository itself was verified public.
 
 Browser screenshots and temporary test output live in ignored `.local/`. Downloaded tool executables, credentials, dependencies, caches, and generated pages are excluded from Git.
+
+## Private Tailscale HTTPS completed
+
+- After the user enabled HTTPS certificates and Serve, configured persistent background Serve at `https://your-node.your-tailnet.ts.net/`, proxying to `http://127.0.0.1:8088`.
+- Serve status confirms tailnet-only access. JSON configuration has no Funnel entry. Caddy remains active, enabled on boot, and bound only to `127.0.0.1:8088`.
+- Requests from the local Tailscale-connected computer validated the HTTPS certificate normally. Anonymous homepage, article, search-index, image, and CSS requests returned 401; authenticated requests returned 200. An authenticated missing route returned 404. Authenticated content retains `private, no-store` caching.
+- Headless Edge verified math, a bundled image, 390px reading without page overflow, and live search over HTTPS. The default browser launch encountered `ERR_CONNECTION_CLOSED`; the successful check used a direct connection with QUIC and HTTP/2 disabled. Default browser protocol/proxy behavior was not independently isolated.
+- Existing SSH forwarding remains a fallback; ordinary access on Tailscale devices no longer requires it. Credentials remain outside source control.

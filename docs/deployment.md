@@ -1,10 +1,25 @@
-# Later: deploy from GitHub on Tencent Cloud
+# Deploy from GitHub on Tencent Cloud
 
-The GitHub repository is `git@github.com:IiCEight/blog-system.git`. The user authorized deployment through the `tencent` SSH alias and selected an SSH tunnel before configuring a domain. The server runs Ubuntu 24.04 with Node.js 22. Deployment verification is recorded separately in `docs/verification.md`.
+The GitHub repository is `git@github.com:IiCEight/blog-system.git`. The user authorized deployment through the `tencent` SSH alias, initially selected an SSH tunnel, then enabled private HTTPS through their existing Tailscale network. The server runs Ubuntu 24.04 with Node.js 22. Deployment verification is recorded separately in `docs/verification.md`.
 
 The source repository was verified **public** during deployment. Change it to private before committing personal notes. The private web server does not restrict access to public GitHub source. Current content consists only of sample notes.
 
-## Private access through an SSH tunnel
+## Private HTTPS through Tailscale
+
+The deployed address is https://your-node.your-tailnet.ts.net/. Each reading device must be connected to the user's tailnet and must sign in with the blog credentials. Tailscale Serve handles HTTPS and proxies requests to the authenticated Caddy listener at `127.0.0.1:8088`. The Serve configuration has no Funnel entry; public access is not enabled.
+
+After enabling HTTPS certificates and Serve in the Tailscale admin console, the server configuration was applied with:
+
+```sh
+sudo tailscale serve --bg --https=443 --yes http://127.0.0.1:8088
+tailscale serve status
+```
+
+The background configuration persists. Keep the existing `fieldnotes-caddy` service and loopback binding. No public web firewall opening is required for this setup. To remove this HTTPS route, use `sudo tailscale serve --https=443 off`; the loopback service and SSH fallback remain available.
+
+Build future releases with `sh deploy/release.sh https://your-node.your-tailnet.ts.net/`. Current output uses relative links and was verified through this HTTPS address. On restore, reconnect the server to the tailnet, restore its Serve route, and check HTTPS and authentication again.
+
+## SSH tunnel fallback
 
 Use `deploy/Caddyfile.tunnel` for a listener on **127.0.0.1:8088 only**. The configuration disables Caddy's admin port and automatic HTTPS for this loopback listener, and still requires a username and password. HTTP is confined to loopback; SSH encrypts the connection between your computer and the server.
 
@@ -12,7 +27,7 @@ Use `deploy/Caddyfile.tunnel` for a listener on **127.0.0.1:8088 only**. The con
 ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:1314:127.0.0.1:8088 tencent
 ```
 
-Keep the tunnel running and open http://localhost:1314/. The normal local development preview remains at port 1313. Other devices also need an SSH tunnel or, later, a configured HTTPS domain. No internet-facing web firewall rule is needed for this mode.
+Keep the tunnel running and open http://localhost:1314/. The normal local development preview remains at port 1313. Tailscale HTTPS is the preferred access path for other devices. No internet-facing web firewall rule is needed for this mode.
 
 Run releases on the server with `sh deploy/release.sh http://127.0.0.1:8088/`. Only the explicit loopback URL exception allows HTTP; a public address must use HTTPS. The dedicated `fieldnotes-caddy` service is installed and enabled. Its unit is in `deploy/fieldnotes-caddy.service`, tailored to the current Ubuntu user and installation directory; adjust those paths for another server. Credentials stay outside the repository in `/home/ubuntu/.config/fieldnotes/credentials.env`, mode 600.
 
@@ -34,9 +49,9 @@ The server build needs outbound access to GitHub and the npm registry. If this i
 
 Set `BLOG_USER` and `BLOG_PASSWORD_HASH` in Caddy's service environment. Generate a password hash with Caddy's interactive `caddy hash-password` command. Keep the password, hash, and SSH keys out of Git. Basic authentication uses the browser's native username/password prompt; it is not a custom login screen.
 
-Use HTTPS. Configure DNS to point your domain to the server and allow TCP 80/443 through both the host firewall and Tencent security group. Do not expose development or alternate static-serving ports. The example protects the full site, including images, assets, and the search index. Its public error responses contain no article content.
+Use HTTPS. The current private setup uses Tailscale Serve and does not need public DNS or public TCP 80/443 access. For a future public-domain deployment, configure domain DNS and allow the required ports through the host firewall and Tencent security group. Do not expose development or alternate static-serving ports. The example protects the full site, including images, assets, and the search index. Its public error responses contain no article content.
 
-Authentication tests must check an article, image, search index, CSS asset, and missing route: anonymous requests must not reveal private content; authenticated requests should succeed where the file exists. Verify redirects and authentication challenges over HTTPS. These checks remain pending until a real server is available.
+Authentication tests must check an article, image, search index, CSS asset, and missing route: anonymous requests must not reveal private content; authenticated requests should succeed where the file exists. The real Tailscale HTTPS address has passed these access checks with normal certificate validation.
 
 ## Update and rollback
 
@@ -54,3 +69,4 @@ To restore, clone or restore the repository, install prerequisites, restore Cadd
 - Hugo mathematical rendering: https://gohugo.io/render-hooks/passthrough/
 - Caddy authentication: https://caddyserver.com/docs/caddyfile/directives/basic_auth
 - Caddy automatic HTTPS: https://caddyserver.com/docs/automatic-https
+- Tailscale Serve: https://tailscale.com/docs/features/tailscale-serve

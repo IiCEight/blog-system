@@ -1,6 +1,6 @@
 # Implementation plan
 
-Status: implemented and deployed on Tencent following user review. Source is pushed to GitHub and synchronized to the server through verified Git bundles because direct server GitHub access is unreliable. The user selected a private SSH tunnel; public-domain HTTPS is deferred.
+Status: implemented and deployed on Tencent following user review. Source is pushed to GitHub and synchronized to the server through verified Git bundles because direct server GitHub access is unreliable. Private HTTPS through Tailscale Serve is deployed and verified; the original SSH tunnel remains a fallback. Public-domain hosting is deferred.
 
 ## Architecture
 
@@ -18,7 +18,7 @@ Typora -> Markdown + image bundles
            Desktop / tablet / phone
 ```
 
-Hugo provides content parsing, templates, taxonomy pages, and static output. A project-owned theme provides the frontend. Caddy provides the only production HTTP entry point. There is no application API or persistent database.
+Hugo provides content parsing, templates, taxonomy pages, and static output. A project-owned theme provides the frontend. Tailscale Serve provides private HTTPS and proxies to authenticated Caddy on loopback. There is no application API or persistent database.
 
 Use the existing Linux server and its preferred packaging; Docker is optional, not assumed to be installed. Pin tested tool and dependency versions when implementation starts. Follow the selected server's actual deployment layout rather than assuming root access.
 
@@ -46,7 +46,7 @@ Build a compact static title/body search index from published posts. Load it onl
 
 ## Access and privacy
 
-For the initial single-user site, protect the entire Caddy site with HTTP Basic Authentication using a hashed password. The deployed mode uses an SSH-encrypted tunnel to an explicit `127.0.0.1:8088` HTTP listener; public-domain deployment must use HTTPS. This produces the browser's native authentication prompt, not a custom application login screen; logout and session management are limited by browser behavior.
+For the initial single-user site, protect the entire Caddy site with HTTP Basic Authentication using a hashed password. Tailscale Serve provides tailnet-only HTTPS at `your-node.your-tailnet.ts.net`, proxying to the explicit `127.0.0.1:8088` HTTP listener. No Funnel route is enabled. An SSH-encrypted tunnel remains a fallback; public-domain deployment must also use HTTPS. This produces the browser's native authentication prompt, not a custom application login screen; logout and session management are limited by browser behavior.
 
 If a branded login page, multiple accounts, or explicit logout becomes necessary, revisit authentication as a separate change. Do not simulate authentication with frontend JavaScript.
 
