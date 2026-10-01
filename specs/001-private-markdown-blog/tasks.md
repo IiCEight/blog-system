@@ -1,6 +1,6 @@
 # Tasks and review gates
 
-Local implementation is complete. Remote acceptance checks remain pending, as detailed in `docs/verification.md`.
+Local implementation and private Tencent SSH-tunnel deployment are complete. Remaining user-content, repository-privacy, and public-domain checks are recorded in `docs/verification.md`.
 
 ## Phase 0: review
 
@@ -27,8 +27,8 @@ These gates reflect the user's request to review before implementation, not an a
 
 ## Phase 3: private hosting and publishing
 
-- [ ] Collect server/domain/runtime details and configure Caddy HTTPS with site-wide authentication. (R06)
-- [x] Implement local validation/build and prepare server-side staged-release/rollback scripts; shell syntax checked, Linux execution pending. (R10)
+- [x] Inspect Tencent Ubuntu/runtime setup and configure loopback-only Caddy with site-wide authentication through the user-selected SSH tunnel. Public-domain HTTPS is deferred. (R06)
+- [x] Implement and exercise Linux staged release, previous-release tracking, rollback, and failed-build preservation. (R10)
 - [x] Document Typora image settings, metadata, publishing, backups, and restore. (R02, R03, R11)
 
 ## Phase 4: acceptance and handoff
@@ -36,7 +36,7 @@ These gates reflect the user's request to review before implementation, not an a
 - [ ] Compare a real Typora sample with rendered output; record unsupported syntax if any. (R01, R02)
 - [x] Verify local routes, archive, tags, search, import, image failures, and draft exclusion. Stable slugs are explicit in metadata; real-note republishing remains part of user acceptance. (R03, R04, R05)
 - [x] Verify 360px, 768px, and 1440px layouts, keyboard skip link, enlarged desktop article text, and reduced motion. (R07, R08, R09)
-- [x] Verify local Caddy denies anonymous and wrong-password requests for articles, images, search data, assets, and missing routes; valid credentials work. Production HTTPS verification remains pending. (R06)
-- [ ] Verify failed builds/uploads preserve the live release and rollback restores it. (R10)
-- [ ] Verify backup restoration in a separate directory. (R11)
+- [x] Verify Caddy access control locally and on Tencent through the tunnel; inspect sockets to confirm loopback-only binding. Public-domain HTTPS is deferred. (R06)
+- [x] Verify failed builds preserve the live release and rollback restores it on Linux. (R10)
+- [x] Rebuild an independent Git clone with image assets in a separate directory. Full encrypted service backup remains pending. (R11)
 - [x] Record successful local checks separately from pending server checks in `docs/verification.md`. (R06, R10)

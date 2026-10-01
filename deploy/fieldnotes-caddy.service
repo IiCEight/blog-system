@@ -1,0 +1,24 @@
+[Unit]
+Description=Private Fieldnotes blog through an SSH tunnel
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/apps/blog-system
+EnvironmentFile=/home/ubuntu/.config/fieldnotes/credentials.env
+Environment=XDG_DATA_HOME=/home/ubuntu/.local/share/fieldnotes-caddy
+Environment=XDG_CONFIG_HOME=/home/ubuntu/.config/fieldnotes-caddy
+ExecStart=/home/ubuntu/apps/blog-system/.tools/caddy/caddy run --config /home/ubuntu/apps/blog-system/deploy/Caddyfile.tunnel --adapter caddyfile
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/ubuntu/.local/share/fieldnotes-caddy /home/ubuntu/.config/fieldnotes-caddy
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

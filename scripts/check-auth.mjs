@@ -13,7 +13,7 @@ try {
   const hash = spawnSync(caddy, ['hash-password', '--plaintext', password], { encoding: 'utf8' });
   assert.equal(hash.status, 0, 'Password hashing failed.');
   const config = '{\n admin off\n auto_https off\n}\n' + readFileSync(join(root, 'deploy/Caddyfile.example'), 'utf8')
-    .replace('notes.example.com {', 'http://127.0.0.1:1413 {')
+    .replace('notes.example.com {', 'http://127.0.0.1:1413 {\n    bind 127.0.0.1')
     .replace('/srv/fieldnotes/current', `"${join(root, 'public').replaceAll('\\', '/')}"`);
   const local = join(root, '.local'); mkdirSync(local, { recursive: true });
   const file = join(local, 'Caddyfile.test'); writeFileSync(file, config);

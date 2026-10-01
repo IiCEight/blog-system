@@ -1,6 +1,6 @@
 # Specification: private Markdown blog
 
-Status: local implementation authorized after workflow and pink design review; remote deployment deferred.
+Status: implemented locally and deployed to Tencent through an authenticated SSH tunnel; public-domain HTTPS deferred by user choice.
 Date: 2026-10-01 (Asia/Shanghai).
 
 ## Purpose
@@ -37,7 +37,7 @@ This is file-based publishing. Browser uploads, browser writing, live cross-devi
 | R03 | Preserve metadata | Each post has a title, creation date with timezone, and stable URL; tags, summary, and update date are supported. Creation date does not change on rebuild. |
 | R04 | Publish evolving notes | Editing a post updates the existing page at the same URL. Drafts are excluded from the production build. No separate idea/note/article workflow is required. |
 | R05 | Browse and find writing | Homepage exposes recent posts; archive lists posts by creation date; tag pages group posts; search matches title and body. Search has empty and no-result states. |
-| R06 | Require private access | Unauthenticated requests cannot obtain HTML pages, images, search data, feeds, or downloads. Valid credentials grant access over HTTPS. |
+| R06 | Require private access | Unauthenticated requests cannot obtain HTML pages, images, search data, feeds, or downloads. Use HTTPS or the user's selected SSH-encrypted tunnel to a loopback-only HTTP listener. |
 | R07 | Provide a custom frontend | Homepage and article layout follow the design in plan.md. No stock theme is presented as the finished design. |
 | R08 | Work across devices | At 360px, 768px, and 1440px widths, navigation and reading remain usable without page-wide horizontal scrolling. Long code and tables can scroll within their containers. |
 | R09 | Support accessible interaction | Keyboard navigation, visible focus, labeled search, readable contrast, and reduced-motion preferences work. Reading remains usable at 200% zoom. |
@@ -76,4 +76,4 @@ CMS, database, browser upload dashboard, online editor, public posts, comments, 
 
 1. Confirm that local Typora writing plus command-based publishing is acceptable for version one.
 2. Homepage and article layout and the revised pink palette are approved.
-3. Deployment details remain pending: chosen server, domain, SSH access, and available runtime. No remote changes are part of the specification phase.
+3. Tencent Cloud Ubuntu deployment is authorized through the `tencent` SSH alias. The user selected an SSH tunnel; domain-based HTTPS is deferred. The source repository must become private before personal notes are committed.

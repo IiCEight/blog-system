@@ -2,17 +2,19 @@
 
 The GitHub repository is `git@github.com:IiCEight/blog-system.git`. The user authorized deployment through the `tencent` SSH alias and selected an SSH tunnel before configuring a domain. The server runs Ubuntu 24.04 with Node.js 22. Deployment verification is recorded separately in `docs/verification.md`.
 
+The source repository was verified **public** during deployment. Change it to private before committing personal notes. The private web server does not restrict access to public GitHub source. Current content consists only of sample notes.
+
 ## Private access through an SSH tunnel
 
 Use `deploy/Caddyfile.tunnel` for a listener on **127.0.0.1:8088 only**. The configuration disables Caddy's admin port and automatic HTTPS for this loopback listener, and still requires a username and password. HTTP is confined to loopback; SSH encrypts the connection between your computer and the server.
 
 ```sh
-ssh -N -o ExitOnForwardFailure=yes -L 1314:127.0.0.1:8088 tencent
+ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:1314:127.0.0.1:8088 tencent
 ```
 
 Keep the tunnel running and open http://localhost:1314/. The normal local development preview remains at port 1313. Other devices also need an SSH tunnel or, later, a configured HTTPS domain. No internet-facing web firewall rule is needed for this mode.
 
-Run releases on the server with `sh deploy/release.sh http://127.0.0.1:8088/`. Only the explicit loopback URL exception allows HTTP; a public address must use HTTPS. A dedicated `fieldnotes-caddy` service keeps the private listener running after SSH disconnects. Credentials stay outside the repository.
+Run releases on the server with `sh deploy/release.sh http://127.0.0.1:8088/`. Only the explicit loopback URL exception allows HTTP; a public address must use HTTPS. The dedicated `fieldnotes-caddy` service is installed and enabled. Its unit is in `deploy/fieldnotes-caddy.service`, tailored to the current Ubuntu user and installation directory; adjust those paths for another server. Credentials stay outside the repository in `/home/ubuntu/.config/fieldnotes/credentials.env`, mode 600.
 
 If the server cannot authenticate to GitHub, a Git bundle transferred over SSH can be cloned while preserving the verified source commit and history. This is an initial transport fallback; direct GitHub pulls still require working server GitHub access.
 

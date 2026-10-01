@@ -1,4 +1,4 @@
-# Local verification
+# Local and Tencent deployment verification
 
 Date: 2026-10-01, Asia/Shanghai.
 
@@ -18,7 +18,20 @@ Date: 2026-10-01, Asia/Shanghai.
 ## Pending
 
 - Real user Typora sample, including any nonstandard HTML, diagrams, or unusual math.
-- Tencent Cloud server provisioning, GitHub repository, domain/DNS, and production HTTPS/authentication smoke checks.
-- Release/rollback execution on Linux and backup/restore exercise. Shell scripts are prepared but are not claimed to be deployment-tested.
+- Domain/DNS and public-domain HTTPS, intentionally deferred in favor of an SSH tunnel.
+- An independent encrypted backup of Caddy service credentials and configuration; source restoration has been exercised, but a complete disaster-recovery backup has not been created.
+- GitHub source privacy: repository is public and must be made private before personal notes are committed.
+
+## Tencent deployment completed
+
+- Connected using the user's `tencent` SSH alias to Ubuntu 24.04 as `ubuntu`; existing services were preserved.
+- Direct server GitHub SSH authentication failed and HTTPS access timed out. Cloned a checksum-verified Git bundle transferred over SSH; the Git history is intact and origin points to the user's GitHub repository.
+- Verified official Linux Hugo 0.167.0 and Caddy 2.11.4 checksums on both computers; built and checked the site on Linux.
+- Installed and enabled the dedicated `fieldnotes-caddy` system service with credentials outside the repository. Verified active state and boot enablement.
+- Corrected Caddy's default listener behavior by adding an explicit `bind 127.0.0.1`. Socket inspection confirms only `127.0.0.1:8088`; direct requests to the server's network address cannot connect.
+- Opened local SSH forwarding at `127.0.0.1:1314`. Anonymous requests receive an authentication challenge; valid credentials load homepage, articles, images, and search index. Private caching is enforced. Browser checks confirmed both localhost and loopback access, rendered math, and images.
+- Exercised a new staged release and previous-release tracking, rolled back successfully, and confirmed an invalid Markdown build leaves the live release unchanged.
+- Rebuilt and verified an independent source clone with its bundled images. This checks source restoration, not a complete encrypted server backup.
+- Only sample notes are present. The website is private through SSH and authentication; the GitHub repository itself was verified public.
 
 Browser screenshots and temporary test output live in ignored `.local/`. Downloaded tool executables, credentials, dependencies, caches, and generated pages are excluded from Git.

@@ -4,7 +4,17 @@ A private, self-hosted blog written in Typora, generated with Hugo, and served o
 
 ## Current status
 
-Implemented and checked locally. The pink frontend, Markdown rendering, archive, tags, search, and Typora import are working. Local Caddy access-control checks passed. Remote deployment and production HTTPS checks are deferred until the GitHub repository and Tencent Cloud server details are available.
+Implemented locally and deployed on Tencent Cloud through a private SSH tunnel. The pink frontend, Markdown rendering, archive, tags, search, and Typora import are working. Linux release, rollback, failed-build preservation, source restoration, and tunnel authentication checks passed. Public-domain HTTPS remains deferred by choice.
+
+## Open the server-hosted blog
+
+```sh
+ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:1314:127.0.0.1:8088 tencent
+```
+
+Then open http://localhost:1314/ and sign in. Local login details are in the ignored `.local/tunnel-login.txt` on the computer used for deployment; they are not in GitHub. Caddy listens only on server loopback. Each other device needs its own SSH tunnel until a private HTTPS domain is configured.
+
+**Source privacy:** the GitHub repository was verified public during deployment. Make it private before committing personal Markdown or images. Authentication on the website does not protect publicly committed source content. Only sample notes have been deployed.
 
 ## Start locally
 
@@ -40,6 +50,6 @@ This project uses spec-driven development (SDD): agree on requirements and accep
 2. [Architecture and visual design](specs/001-private-markdown-blog/plan.md)
 3. [Implementation and verification tasks](specs/001-private-markdown-blog/tasks.md)
 
-The user confirmed the file-based workflow, approved the pink design, and authorized local development with Git. Source is kept locally until the user creates the GitHub repository. The planned deployment flow is GitHub push, server clone/pull, Hugo build, and a staged release behind Caddy; see [deployment preparation](docs/deployment.md).
+The user confirmed the file-based workflow, approved the pink design, and authorized local development with Git, then supplied the GitHub repository and `tencent` SSH alias. Source is pushed to GitHub. Because GitHub access from the server is unreliable, the initial server clone used a checksum-verified Git bundle sent over SSH. See [deployment instructions](docs/deployment.md).
 
 The `notebook/` directory is an unused scaffold from the earlier Sites proposal. It is untouched, excluded from Git, and not part of this Hugo project. Production code lives at the project root; `design/mockups/` preserves the design review artifacts.

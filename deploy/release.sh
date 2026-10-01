@@ -22,4 +22,4 @@ fi
 ln -s "$release" "$BLOG_ROOT/current.new"
 mv -Tf "$BLOG_ROOT/current.new" "$BLOG_ROOT/current"
 printf 'Release ready: %s\n' "$release"
-printf 'Verify HTTPS authentication before considering this deployed.\n'
+printf 'Verify authentication and the configured HTTPS or SSH-tunnel access boundary.\n'
