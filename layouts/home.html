@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{ $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+<section class="masthead" aria-labelledby="title">
+  <div class="eyebrow"><span>{{ site.Params.edition }}</span><span>VOL. 01 / {{ now.Format "2006" }}</span></div>
+  <h1 id="title">{{ site.Title | upper }}<span class="period">.</span></h1>
+  <div class="masthead-bottom"><p>{{ site.Params.intro }}</p><span class="edition">WRITTEN OVER TIME</span></div>
+</section>
+<section id="journal" class="journal" aria-labelledby="journal-title">
+  <div class="section-label"><h2 id="journal-title">Recent writing</h2><span>{{ len $posts }} {{ if eq (len $posts) 1 }}ENTRY{{ else }}ENTRIES{{ end }}</span></div>
+  {{ range first 1 $posts }}
+  <article class="featured">
+    <div class="feature-meta"><span class="label">LATEST ENTRY</span><time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "Jan 02, 2006" | upper }}</time></div>
+    <div class="feature-copy"><a href="{{ .RelPermalink }}"><h3>{{ .Title }}</h3></a><p>{{ .Description | default (.Summary | plainify | truncate 170) }}</p><div class="feature-bottom">{{ range first 1 (.GetTerms "tags") }}<a class="tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}<a class="text-link" href="{{ .RelPermalink }}">Read the note</a><span>{{ .ReadingTime }} MIN READ</span></div></div>
+  </article>
+  {{ else }}<div class="empty"><h3>Your first note starts here.</h3><p>Add a Markdown post and it will appear in your journal.</p></div>{{ end }}
+  <div class="secondary-grid">{{ range first 2 (after 1 $posts) }}<article class="small-entry"><time class="label" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 02, 2006" | upper }}</time><a href="{{ .RelPermalink }}"><h3>{{ .Title }}</h3><span class="expand-label">Read the note</span></a><div class="entry-footer">{{ range first 1 (.GetTerms "tags") }}<a class="tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}<span>{{ .ReadingTime }} MIN READ</span></div></article>{{ end }}</div>
+</section>
+<section class="archive" aria-labelledby="index-title"><div class="section-label"><h2 id="index-title">The index</h2><a class="text-link" href="{{ "/posts/" | relURL }}">All writing</a></div>{{ range first 8 $posts }}{{ partial "post-row.html" . }}{{ end }}</section>
+{{ end }}

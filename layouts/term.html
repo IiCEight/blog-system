@@ -1,0 +1,3 @@
+{{ define "main" }}
+<header class="collection-heading"><span class="label">FILED UNDER</span><h1>{{ .Title }}<span class="period">.</span></h1><a class="text-link" href="{{ "/tags/" | relURL }}">All tags</a></header><section class="archive" aria-label="Tagged notes">{{ range .Pages.ByDate.Reverse }}{{ partial "post-row.html" . }}{{ end }}</section>
+{{ end }}

@@ -1,0 +1,25 @@
+{
+  "name": "private-fieldnotes",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/hugo.mjs server --bind 127.0.0.1 --port 1313 --disableFastRender --renderToMemory",
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test:ui": "node scripts/check-ui.mjs",
+    "test:content": "node scripts/test-content.mjs",
+    "test:auth": "node scripts/check-auth.mjs",
+    "import": "node scripts/import.mjs",
+    "new": "node scripts/new.mjs"
+  },
+  "dependencies": {
+    "katex": "0.18.4",
+    "markdown-it": "14.1.0",
+    "yaml": "2.8.1"
+  },
+  "devDependencies": { "playwright-core": "1.56.1" }
+}

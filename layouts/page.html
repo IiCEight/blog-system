@@ -1,0 +1,9 @@
+{{ define "main" }}
+<header class="article-heading">
+  <div class="eyebrow"><a href="{{ "/posts/" | relURL }}">BACK TO JOURNAL</a><span>A PERSONAL NOTE</span></div>
+  <h1>{{ .Title }}<span class="period">.</span></h1>
+  {{ with .Description }}<p class="article-deck">{{ . }}</p>{{ end }}
+  <div class="article-meta"><span><span class="meta-label">CREATED</span><time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "January 02, 2006" }}</time></span>{{ if gt .Lastmod .Date }}<span><span class="meta-label">UPDATED</span><time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Lastmod.Format "January 02, 2006" }}</time></span>{{ end }}<span><span class="meta-label">READING TIME</span>{{ .ReadingTime }} {{ if eq .ReadingTime 1 }}minute{{ else }}minutes{{ end }}</span>{{ range .GetTerms "tags" }}<a class="tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}</div>
+</header>
+<div class="reading-layout">{{ if findRE "<li>" .TableOfContents }}<aside class="contents"><details open><summary>IN THIS NOTE</summary>{{ .TableOfContents }}</details></aside>{{ else }}<aside class="contents" aria-hidden="true"></aside>{{ end }}<article class="prose">{{ .Content }}<div class="note-end"><span>END OF NOTE</span><a href="{{ "/posts/" | relURL }}">Back to journal</a></div></article></div>
+{{ end }}

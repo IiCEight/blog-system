@@ -1,0 +1,4 @@
+{{ define "main" }}
+<header class="collection-heading"><span class="label">SOMETHING TO RETURN TO</span><h1>Find a thought<span class="period">.</span></h1></header>
+<section class="search-page" data-search-index="{{ "/index.json" | relURL }}"><form role="search" id="search-form"><label for="query">Search your writing</label><div class="search-controls"><input id="query" name="q" type="search" placeholder="An idea, a title, a question…" autocomplete="off"><button type="submit">Search</button></div></form><p id="search-status" role="status">Enter a word to find a note.</p><div id="search-results"></div><noscript><p>Search needs JavaScript. You can still browse the <a class="text-link" href="{{ "/posts/" | relURL }}">archive</a> or <a class="text-link" href="{{ "/tags/" | relURL }}">tags</a>.</p></noscript></section>
+{{ end }}

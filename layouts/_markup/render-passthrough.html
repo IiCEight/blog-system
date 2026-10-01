@@ -1,0 +1,4 @@
+{{- $opts := dict "output" "htmlAndMathml" "displayMode" (eq .Type "block") -}}
+{{- with try (transform.ToMath .Inner $opts) -}}
+  {{- with .Err -}}{{ errorf "Invalid math at %s: %s" $.Position . }}{{- else -}}{{ .Value }}{{ $.Page.Store.Set "hasMath" true }}{{- end -}}
+{{- end -}}

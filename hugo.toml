@@ -1,0 +1,42 @@
+baseURL = 'http://localhost:1313/'
+locale = 'en'
+title = 'Fieldnotes'
+timeZone = 'Asia/Shanghai'
+disableKinds = ['RSS', 'sitemap']
+enableRobotsTXT = false
+buildDrafts = false
+buildFuture = false
+
+[params]
+  description = 'A private journal of ideas and learning.'
+  intro = 'Ideas worth keeping. Thoughts still taking shape.'
+  logo = 'fn'
+  edition = 'A PERSONAL RECORD'
+
+[permalinks]
+  posts = '/posts/:slug/'
+
+[taxonomies]
+  tag = 'tags'
+
+[outputs]
+  home = ['HTML', 'JSON']
+
+[frontmatter]
+  date = ['date']
+  lastmod = ['lastmod', 'date']
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = false
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [['$$', '$$'], ['\[', '\]']]
+      inline = [['$', '$'], ['\(', '\)']]
+  [markup.highlight]
+    style = 'dracula'
+    noClasses = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3

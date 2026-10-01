@@ -1,0 +1,15 @@
+.tools/
+node_modules/
+public/
+resources/_gen/
+static/vendor/katex/
+.hugo_build.lock
+.cache/
+.local/
+test-results/
+deployment.local.json
+.env
+.env.*
+!.env.example
+notebook/
+*.log
