@@ -12,8 +12,8 @@ try {
   const password = randomBytes(24).toString('hex');
   const hash = spawnSync(caddy, ['hash-password', '--plaintext', password], { encoding: 'utf8' });
   assert.equal(hash.status, 0, 'Password hashing failed.');
-  const config = '{\n admin off\n auto_https off\n}\n' + readFileSync(join(root, 'deploy/Caddyfile.example'), 'utf8')
-    .replace('notes.example.com {', 'http://127.0.0.1:1413 {\n    bind 127.0.0.1')
+  const config = readFileSync(join(root, 'deploy/Caddyfile.tunnel'), 'utf8')
+    .replace('http://:8088 {', 'http://:1413 {')
     .replace('/srv/fieldnotes/current', `"${join(root, 'public').replaceAll('\\', '/')}"`);
   const local = join(root, '.local'); mkdirSync(local, { recursive: true });
   const file = join(local, 'Caddyfile.test'); writeFileSync(file, config);
@@ -45,6 +45,11 @@ try {
   }
   const wrong = await fetch(origin + '/', { headers: { Authorization: `Basic ${Buffer.from('test-reader:wrong').toString('base64')}` } });
   assert.equal(wrong.status, 401);
+  const localhost = 'http://localhost:1413';
+  assert.equal((await fetch(localhost)).status, 401, 'Localhost must require authentication, not return an unmatched empty response.');
+  const hostResponse = await fetch(localhost, { headers: { Authorization: `Basic ${Buffer.from(`test-reader:${password}`).toString('base64')}` } });
+  assert.equal(hostResponse.status, 200);
+  assert((await hostResponse.text()).includes('FIELDNOTES'), 'Localhost must serve actual page content.');
   console.log('Local Caddy checks passed: HTML, image, CSS, search data, and missing routes require authentication; wrong credentials are denied. Production HTTPS remains unverified.');
 } catch (error) { fail(error); }
 finally { server?.kill(); }
