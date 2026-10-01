@@ -1,6 +1,6 @@
 # Implementation plan
 
-Status: implemented locally following user review. Remote deployment is explicitly deferred until the user creates a GitHub repository.
+Status: implemented and deployed on Tencent following user review. Source is pushed to GitHub and synchronized to the server through verified Git bundles because direct server GitHub access is unreliable. The user selected a private SSH tunnel; public-domain HTTPS is deferred.
 
 ## Architecture
 
@@ -46,11 +46,11 @@ Build a compact static title/body search index from published posts. Load it onl
 
 ## Access and privacy
 
-For the initial single-user site, protect the entire Caddy site with HTTP Basic Authentication over HTTPS, using a hashed password. This produces the browser's native authentication prompt, not a custom application login screen; logout and session management are limited by browser behavior.
+For the initial single-user site, protect the entire Caddy site with HTTP Basic Authentication using a hashed password. The deployed mode uses an SSH-encrypted tunnel to an explicit `127.0.0.1:8088` HTTP listener; public-domain deployment must use HTTPS. This produces the browser's native authentication prompt, not a custom application login screen; logout and session management are limited by browser behavior.
 
 If a branded login page, multiple accounts, or explicit logout becomes necessary, revisit authentication as a separate change. Do not simulate authentication with frontend JavaScript.
 
-Serve only generated output through Caddy. Do not expose source files, Git history, environment files, or private configuration. Avoid alternate unauthenticated static hosts or ports. All article assets and search data remain behind the same access check. Configure private caching and disable unused feed outputs.
+Serve only generated output through Caddy. Do not expose source files, Git history, environment files, or private configuration. Avoid alternate unauthenticated static hosts or ports. All article assets and search data remain behind the same access check. Configure private caching and disable unused feed outputs. The source repository was verified public during deployment; it must be made private before personal notes are committed.
 
 ## Publishing and recovery
 
